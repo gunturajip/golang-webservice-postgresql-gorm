@@ -6,6 +6,8 @@ import (
 	"golang-webservice/routers"
 
 	_ "github.com/lib/pq"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 var PORT = "127.0.0.1:8080"
@@ -36,8 +38,8 @@ func main() {
 	// http.HandleFunc("/employee", createEmployees)
 	// fmt.Println("Application is listening on port", PORT)
 	// http.ListenAndServe(PORT, nil)
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
-	db, err = sql.Open("postgres", psqlInfo)
+	config := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
+	db, err = sql.Open(postgres.Open(config), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
