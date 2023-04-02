@@ -124,5 +124,14 @@ func UpdateBook(ctx *gin.Context) {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
+	err = db.First(&BookUpdate, "id = ?", BookID).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			ctx.AbortWithStatusJSON(http.StatusNotFound, "Book not found")
+			return
+		}
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
 	ctx.JSON(http.StatusOK, BookUpdate)
 }
