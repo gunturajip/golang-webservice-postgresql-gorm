@@ -1,0 +1,128 @@
+basePath: /
+definitions:
+  models.Book:
+    properties:
+      author:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      name_book:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+host: 127.0.0.1:8080
+info:
+  contact:
+    email: soberkoder@swagger.io
+    name: API Support
+  description: This is a simple service for managing books
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Book API
+  version: "1.0"
+paths:
+  /books:
+    get:
+      consumes:
+      - application/json
+      description: Get details of all books
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Book'
+      summary: Get books details
+      tags:
+      - books
+    post:
+      consumes:
+      - application/json
+      description: Post details of a book corresponding to the input Id
+      parameters:
+      - description: create a book
+        in: body
+        name: models.Book
+        required: true
+        schema:
+          $ref: '#/definitions/models.Book'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Book'
+      summary: Post book details for the given Id
+      tags:
+      - books
+  /books/{Id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete details of a book corresponding to the input Id
+      parameters:
+      - description: ID of the book
+        in: path
+        name: Id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Book'
+      summary: Delete book details for a given Id
+      tags:
+      - books
+    get:
+      consumes:
+      - application/json
+      description: Get details of a book corresponding to the input Id
+      parameters:
+      - description: ID of the book
+        in: path
+        name: Id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Book'
+      summary: Get book details for the given Id
+      tags:
+      - books
+    put:
+      consumes:
+      - application/json
+      description: Update details of a book corresponding to the input Id
+      parameters:
+      - description: ID of the book
+        in: path
+        name: Id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Book'
+      summary: Update book for the given Id
+      tags:
+      - books
+swagger: "2.0"

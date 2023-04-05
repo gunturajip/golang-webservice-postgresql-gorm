@@ -10,6 +10,14 @@ import (
 	"gorm.io/gorm"
 )
 
+// GetBooks godoc
+// @Summary Get books details
+// @Description Get details of all books
+// @Tags books
+// @Accept json
+// @Produce json
+// @Success 200 {object} models.Book
+// @Router /books [get]
 func GetBooks(ctx *gin.Context) {
 	db := database.GetDB()
 
@@ -26,6 +34,15 @@ func GetBooks(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, Books)
 }
 
+// GetBook godoc
+// @Summary Get book details for the given Id
+// @Description Get details of a book corresponding to the input Id
+// @Tags books
+// @Accept json
+// @Produce json
+// @Param Id path int true "ID of the book"
+// @Success 200 {object} models.Book
+// @Router /books/{Id} [get]
 func GetBook(ctx *gin.Context) {
 	BookID := ctx.Param("bookID")
 
@@ -44,6 +61,15 @@ func GetBook(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, Book)
 }
 
+// CreateBook godoc
+// @Summary Post book details for the given Id
+// @Description Post details of a book corresponding to the input Id
+// @Tags books
+// @Accept json
+// @Produce json
+// @Param models.Book body models.Book true "create a book"
+// @Success 200 {object} models.Book
+// @Router /books [post]
 func CreateBook(ctx *gin.Context) {
 	db := database.GetDB()
 
@@ -72,6 +98,15 @@ func CreateBook(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, Book)
 }
 
+// DeleteBook godoc
+// @Summary Delete book details for a given Id
+// @Description Delete details of a book corresponding to the input Id
+// @Tags books
+// @Accept json
+// @Produce json
+// @Param Id path int true "ID of the book"
+// @Success 200 {object} models.Book
+// @Router /books/{Id} [delete]
 func DeleteBook(ctx *gin.Context) {
 	BookID := ctx.Param("bookID")
 
@@ -92,6 +127,15 @@ func DeleteBook(ctx *gin.Context) {
 	})
 }
 
+// UpdateBook godoc
+// @Summary Update book for the given Id
+// @Description Update details of a book corresponding to the input Id
+// @Tags books
+// @Accept json
+// @Produce json
+// @Param Id path int true "ID of the book"
+// @Success 200 {object} models.Book
+// @Router /books/{Id} [put]
 func UpdateBook(ctx *gin.Context) {
 	BookID := ctx.Param("bookID")
 
@@ -116,6 +160,15 @@ func UpdateBook(ctx *gin.Context) {
 	}
 
 	err := db.Model(&Book).Where("id = ?", BookID).Updates(BookUpdate).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			ctx.AbortWithStatusJSON(http.StatusNotFound, "Book not found")
+			return
+		}
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+	err = db.First(&BookUpdate, "id = ?", BookID).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			ctx.AbortWithStatusJSON(http.StatusNotFound, "Book not found")
